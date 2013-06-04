@@ -3,7 +3,8 @@
   (:use hiccup.core)
   (:use queryizer.controller)
   (:require [clojure.data.json :as json]
-    [compojure.handler :as handler]))
+            [ring.util.response :refer [redirect]]
+            [compojure.handler :as handler]))
 
 
 (defn view-layout [& content]
@@ -14,7 +15,7 @@
     [:title "Queryizer"]]
     [:body content]))
 
-;;hyperlinked list of predefined queries 
+;;hyperlinked list of predefined queries
 (def query-selection
   (list [:h2 "Available queries"]
     (for
@@ -63,7 +64,7 @@
   (view-jobs))
 (GET "/jobs/:job" [job] (println "POST jobs")
   (submit-job (query job))
-  (view-jobs)))
+  (redirect "/jobs")))
 
 
 (def app (-> main-routes (handler/site)))
