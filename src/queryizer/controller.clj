@@ -32,7 +32,7 @@
 
 ;;returns sql quesry associated with id
 (defn query [id]
-  (:sql (first (filter #(= id (:id %)) available-queries))))
+  (:sql (first (filter #(= id (:job %)) available-queries))))
 
 ;;(def list-jobs
 ;;  (read-string
@@ -54,13 +54,13 @@
 (defn- update-jobs
   "Updates our job state with a job."
   [job]
-  (swap! jobs (fn [js] (assoc js (:id job) job))))
+  (swap! jobs (fn [js] (assoc js (:job job) job))))
 
 (defn- run-job
   "Runs the job in a thread."
   [job]
   (doto (Thread. (fn [] (update-jobs (run-query job))))
-    (.setName (str "job-runner-" (:id job)))
+    (.setName (str "job-runner-" (:job job)))
     (.start)))
 
 (defn- make-id
